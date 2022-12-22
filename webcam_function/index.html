@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div style = "font-size : 55px;">버튼을 누르고 과자를 비쳐주세요</div>
+<button class = "button" style="border-radius: 30%; font-size:35px;
+background-color: #1eff5b; height: 110px; width: 110px; margin-left:0.5px; 
+margin-right:0.5px; 
+margin-top:0.5px; margin-bottom:0.5px; "
+type="button" onclick="init()">Start</button>
+
+<button class="stop-button" style="border-radius: 30%; font-size:35px;
+background-color: #ee6575; height: 110px; width: 110px; margin-left:30px; 
+margin-right:0.5px; 
+margin-top:0.5px; margin-bottom:0.5px"
+type="button" onclick="location.href='/';">Reset</button>
+
+<div id="webcam-container"></div>
+<div style = "font-size : 52px;" id="label-container"></div>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.12.0/dist/tf.min.js"></script>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>
+<script type="text/javascript">
+    
+    // More API functions here:
+    // https://github.com/googlecreativelab/teachablemachine-community/tree/master/libraries/image
+
+    // the link to your model provided by Teachable Machine export panel
+    const URL = "./my_model/";
+
+    let model, webcam, labelContainer, maxPredictions;
+
+    // Load the image model and setup the webcam
+    async function init() {
+        const modelURL = URL + "model.json";
+        const metadataURL = URL + "metadata.json";
+
+        // load the model and metadata
+        // Refer to tmImage.loadFromFiles() in the API to support files from a file picker
+        // or files from your local hard drive
+        // Note: the pose library adds "tmImage" object to your window (window.tmImage)
+        model = await tmImage.load(modelURL, metadataURL);
+        maxPredictions = model.getTotalClasses();
+
+        // Convenience function to setup a webcam
+        const flip = true; // whether to flip the webcam
+        webcam = new tmImage.Webcam(450, 400, flip); // width, height, flip
+        await webcam.setup(); // request access to the webcam
+        await webcam.play();
+        window.requestAnimationFrame(loop);
+
+
+        // append elements to the DOM
+        document.getElementById("webcam-container").appendChild(webcam.canvas);
+        labelContainer = document.getElementById("label-container");
+        for (let i = 0; i < maxPredictions; i++) { // and class labels
+            labelContainer.appendChild(document.createElement("div"));
+        }
+    }
+
+    async function loop() {
+        webcam.update(); // update the webcam frame
+        await predict();
+        window.requestAnimationFrame(loop);
+    }
+
+    var status = "null"
+    // run the webcam image through the image model
+    async function predict() {
+        // predict can take in an image, video or canvas html element
+        const prediction = await model.predict(webcam.canvas);
+
+        if (prediction[0].className == "banana" && prediction[0].probability.toFixed(2) == 1.00) {
+            labelContainer.childNodes[0].innerHTML = '바나나킥<br>가격:1640원<br>열량:315kcal<br>'
+            if (status = "banana") {
+                var audio = new Audio('바나나킥.mp3');
+                audio.play();
+                endloop;                   
+            }
+        } 
+        else if (prediction[1].className == "chip" && prediction[1].probability.toFixed(2) == 1.00) {
+            labelContainer.childNodes[0].innerHTML = "포카칩<br>가격:1700원<br>열량:501kcal<br>"
+            if (status = "chip") {
+                var audio = new Audio('포카칩.mp3');
+                audio.play();
+                endloop;    
+            }
+        } 
+        else if (prediction[2].className == "heim" && prediction[2].probability.toFixed(2) == 1.00) {
+            labelContainer.childNodes[0].innerHTML = "화이트하임<br>가격:3300원<br>열량:250kcal<br>"
+            if (status = "heim") {
+                var audio = new Audio('화이트하임.mp3');
+                audio.play();
+                endloop;    
+            }
+        } 
+        else if (prediction[3].className == "onion" && prediction[3].probability.toFixed(2) == 1.00) {
+            labelContainer.childNodes[0].innerHTML = "양파링<br>가격:1600원<br>열량:190kcal<br>"
+            if (status = "onion") {
+                var audio = new Audio('양파링.mp3');
+                audio.play();
+                endloop;    
+            }
+        } 
+        else if (prediction[4].className == "oreo" && prediction[4].probability.toFixed(2) == 1.00) {
+            labelContainer.childNodes[0].innerHTML = "오레오<br>가격:1900원<br>열량:250kcal<br>"
+            if (status = "oreo") {
+                var audio = new Audio('오레오.mp3');
+                audio.play();
+                endloop;    
+            }
+        }
+        else if (prediction[5].className == "pepero" && prediction[5].probability.toFixed(2) == 1.00) {
+            labelContainer.childNodes[0].innerHTML = "아몬드빼빼로<br>가격:1700원<br>열량:200kcal<br>"
+            if (status = "pepero") {
+                var audio = new Audio('아몬드빼빼로.mp3');
+                audio.play();
+                endloop;   
+            }
+        }
+        else if (prediction[6].className == "pie" && prediction[6].probability.toFixed(2) == 1.00) {
+            labelContainer.childNodes[0].innerHTML = "후렌치파이<br>가격:4200원<br>열량:130kcal<br>"
+            if (status = "pie") {
+                var audio = new Audio('후렌치파이.mp3');
+                audio.play();
+                endloop;
+            }
+        }
+        else if (prediction[7].className == "pizza" && prediction[7].probability.toFixed(2) == 1.00) {
+            labelContainer.childNodes[0].innerHTML = "벌집핏자<br>가격:1700원<br>열량:155kcal<br>"
+            if (status = "pizza") {
+                var audio = new Audio('벌집핏자.mp3');
+                audio.play();
+                endloop;  
+            }
+        }
+        else if (prediction[8].className == "shrimp" && prediction[8].probability.toFixed(2) == 1.00) {
+            labelContainer.childNodes[0].innerHTML = "새우깡<br>가격:1300원<br>열량:145kcal<br>"
+            if (status = "shrimp") {
+                var audio = new Audio('새우깡.mp3');
+                audio.play();
+                endloop;
+            }
+        }
+        else if (prediction[9].className == "turtle" && prediction[9].probability.toFixed(2) == 1.00) {
+            labelContainer.childNodes[0].innerHTML = "꼬북칩<br>가격:1500원<br>열량:157kcal<br>"
+            if (status = "turtle") {
+                var audio = new Audio('꼬북칩.mp3');
+                audio.play();
+                endloop;    
+            }
+        }
+         else {
+            labelContainer.childNodes[0].innerHTML = "null"
+        }
+
+        // for (let i = 0; i < maxPredictions; i++) {
+        //     const classPrediction =
+        //         prediction[i].className + ": " + prediction[i].probability.toFixed(2);
+        //     labelContainer.childNodes[i].innerHTML = classPrediction;
+        // }
+    }
+</script>
+
+</body>
+</html>

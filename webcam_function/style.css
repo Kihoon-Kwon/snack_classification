@@ -1,0 +1,21 @@
+body {
+    font-family: system-ui;
+    background: #030303;
+    color: white;
+    text-align: center;
+  }
+  .button {
+    position: relative;
+    border: 10px solid #1eff5b;
+  }
+  .button:before {
+      content: " ";
+      position: absolute;
+      z-index: -1;
+      top: -10px;
+      left: -11px;
+      right: 5px;
+      bottom: 87px;
+      border: 56px solid #252523;
+      border-radius: 50%;
+  }
