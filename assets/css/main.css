@@ -126,19 +126,19 @@ button {
 }
 
 /*테스트*/
-/* .cam-button {
+.cam-button {
   padding: 1.5rem;
   background-color: #4dbcf0;
   top: 20%;
   left: 33%;
   position: relative;
-} */
+}
 
 .snack-button {
   padding: 1.5rem;
   background-color: #ffff00;
   top: 20%;
-  left: 55%;
+  left: 45%;
   position: relative;
 }
 
